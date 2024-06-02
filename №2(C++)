@@ -1,0 +1,56 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+// Функция, которую мы минимизируем
+double f(double x1, double x2) {
+  return x1 + 2 * x2 + 4 * sqrt(1 + x1 * x1 + x2 * x2);
+}
+
+// Частные производные функции
+double df_dx1(double x1, double x2) {
+  return 1 + (4 * x1) / sqrt(1 + x1 * x1 + x2 * x2);
+}
+
+double df_dx2(double x1, double x2) {
+  return 2 + (4 * x2) / sqrt(1 + x1 * x1 + x2 * x2);
+}
+
+int main() {
+  // Начальная точка
+  double x1 = 1.0;
+  double x2 = 1.0;
+
+  // Шаг градиентного спуска
+  double learning_rate = 0.1;
+
+  // Порог сходимости
+  double tolerance = 1e-6;
+
+  // Максимальное количество итераций
+  int max_iterations = 1000;
+
+  // Градиентный спуск
+  for (int i = 0; i < max_iterations; i++) {
+    // Вычисляем градиент
+    double gradient_x1 = df_dx1(x1, x2);
+    double gradient_x2 = df_dx2(x1, x2);
+
+    // Обновляем координаты
+    x1 -= learning_rate * gradient_x1;
+    x2 -= learning_rate * gradient_x2;
+
+    // Проверяем условие сходимости
+    if (sqrt(gradient_x1 * gradient_x1 + gradient_x2 * gradient_x2) < tolerance) {
+      cout << "Сходимость достигнута за " << i + 1 << " итераций." << endl;
+      break;
+    }
+  }
+
+  // Выводим результат
+  cout << "Минимум функции достигается в точке: (" << x1 << ", " << x2 << ")" << endl;
+  cout << "Значение функции в точке минимума: " << f(x1, x2) << endl;
+
+  return 0;
+}
